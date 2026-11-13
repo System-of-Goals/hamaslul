@@ -14,8 +14,10 @@ export default function HoursChart() {
   });
   const [sel, setSel] = useState(weeks.length - 1);
   const max = Math.max(60, ...weeks.map((x) => Math.max(x.min, x.target)));
-  const cur = weeks[sel];
+  const idx = sel < 0 || sel >= weeks.length ? weeks.length - 1 : sel;
+  const cur = weeks[idx];
 
+  if (!cur) return null;
   return (
     <div className="hours-chart">
       <div className="hc-readout" aria-live="polite">
@@ -24,7 +26,7 @@ export default function HoursChart() {
       </div>
       <div className="hc-plot" style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 60px))` }} role="img" aria-label="שעות לימוד בשמונת השבועות האחרונים">
         {weeks.map((x, i) => (
-          <button key={iso(x.w)} className={`hc-col ${i === sel ? 'sel' : ''}`} onClick={() => setSel(i)}
+          <button key={iso(x.w)} className={`hc-col ${i === idx ? 'sel' : ''}`} onClick={() => setSel(i)}
             aria-label={`שבוע ${shortDate(x.w)}: ${fmtDur(x.min)} מתוך ${Math.round(x.target / 60)} שעות`}>
             {x.target > 0 && <span className="hc-target" style={{ bottom: `${(x.target / max) * 100}%` }} />}
             <span className="hc-bar" style={{ height: `${Math.max(2, (x.min / max) * 100)}%` }} />
@@ -32,7 +34,7 @@ export default function HoursChart() {
         ))}
       </div>
       <div className="hc-axis" style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 60px))` }}>
-        {weeks.map((x, i) => <span key={iso(x.w)} className={i === sel ? 'sel' : ''}>{shortDate(x.w)}</span>)}
+        {weeks.map((x, i) => <span key={iso(x.w)} className={i === idx ? 'sel' : ''}>{shortDate(x.w)}</span>)}
       </div>
       <p className="muted small hc-key"><span className="hc-key-line" /> קו = היעד של אותו שבוע</p>
       <table className="sr-only">

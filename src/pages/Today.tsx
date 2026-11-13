@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChefHat, Compass, FileUp, Home, Moon, Shield, Sun } from 'lucide-react';
 import { addDays, dayName, greeting, hebrewDate, iso, shortDate } from '../lib/dates';
-import { dayOff, isDone, progress, streak, tasksFor, weekProgress, weekTypeOf } from '../lib/schedule';
+import { dayOff, isDone, needsNudge, progress, streak, tasksFor, weekProgress, weekTypeOf } from '../lib/schedule';
 import { coursePace, dueToday } from '../lib/course';
 import { findRecipe } from '../lib/recipes';
 import { pickFile, useStore } from '../lib/store';
@@ -24,6 +24,7 @@ export default function Today() {
   const [now, setNow] = useState(new Date());
   const [importMsg, setImportMsg] = useState('');
   const [editing, setEditing] = useState<DayTask | null>(null);
+  const [nudgeOff, setNudgeOff] = useState(() => { try { return localStorage.getItem('nudge-dismissed') === iso(new Date()); } catch { return false; } });
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 60_000);
     return () => clearInterval(t);
@@ -117,6 +118,19 @@ export default function Today() {
             streak={streak(now, data, logs, meta.firstUse)}
             pace={coursePace(data, day)}
           />
+          {!nudgeOff && !off && (() => {
+            const pace = coursePace(data, day);
+            const why = needsNudge(now, data, logs, meta.firstUse, pace?.status === 'behind' ? pace.n : 0);
+            return why && (
+              <section className="glass nudge">
+                <p>🧭 {why}. רוצה לעצור רגע ולחזור למסלול?</p>
+                <div className="rate-row">
+                  <Link to="/back-on-track" className="pill gold">בוא נחזור למסלול</Link>
+                  <button className="pill" onClick={() => { try { localStorage.setItem('nudge-dismissed', day); } catch { /* ignore */ } setNudgeOff(true); }}>לא עכשיו</button>
+                </div>
+              </section>
+            );
+          })()}
           <QuoteCard date={now} />
 
           {off ? (

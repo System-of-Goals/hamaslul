@@ -53,7 +53,12 @@ export default function Goals() {
                 <ChevronLeft size={18} className="muted" />
               </div>
               {g.metric === 'stress' ? (
-                <p className="goal-line muted">🧘 רמת לחץ שבועית – תתמלא מהסיכום השבועי.</p>
+                (() => {
+                  const last = Object.entries(data.summaries ?? {}).filter(([, v]) => v.savedAt && v.stress).sort(([a], [b]) => b.localeCompare(a))[0];
+                  return last
+                    ? <p className="goal-line">🧘 רמת לחץ בסיכום האחרון: <strong>{last[1].stress}/5</strong></p>
+                    : <p className="goal-line muted">🧘 רמת לחץ שבועית – תתמלא מהסיכום השבועי.</p>;
+                })()
               ) : (
                 <>
                   <div className="bar"><span style={{ width: `${pct ?? 0}%` }} /></div>

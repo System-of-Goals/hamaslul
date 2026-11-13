@@ -57,6 +57,17 @@ export interface Recipe {
 }
 export interface Workout { date: string; stage: number; rating: 'easy' | 'ok' | 'hard'; km?: number; minutes?: number }
 
+export interface WeekSummary {
+  wins: string[];
+  postponed: string;
+  stress: number;           // 1–5
+  gratitude: string;
+  financeChecked: boolean;
+  nextFocus: string;
+  savedAt: string;
+}
+export interface Contact { name: string; phone?: string }
+
 export interface JournalEntry { id: string; date: string; topic: string; learned: string; caseNote?: string }
 export interface Question { id: string; text: string; answered: boolean; answer?: string }
 
@@ -80,6 +91,11 @@ export interface UserData {
   workouts?: Workout[];
   sleepLog?: Record<string, { bed: string; wake: string }>;  // key: morning date
   deepClean?: Record<string, string[]>;     // key: "YYYY-MM" → rooms done
+  money?: { loanDue: string; financeUrl?: string; savings: { from: string; amount: number }[] };
+  summaries?: Record<string, WeekSummary>;   // key: Sunday ISO date
+  wins?: { date: string; text: string }[];
+  contacts?: Contact[];
+  backOnTrackLog?: string[];                 // dates the page was used
   journal?: JournalEntry[];
   questions?: Question[];
 }

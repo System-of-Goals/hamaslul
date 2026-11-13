@@ -138,3 +138,20 @@ export function nextWorkingDay(from: Date, data: UserData | null) {
   }
   return addDays(from, 1);
 }
+
+/** Early-warning signs that suggest opening "back on track" (no judgement – just a gentle offer). */
+export function needsNudge(today: Date, data: UserData | null, logs: Record<string, DayLog>, firstUse: string, behind: number) {
+  if (!data) return null;
+  if (behind >= 2) return 'יש קצת פיגור בקורס';
+  const misses: boolean[] = [];
+  for (let d = addDays(today, -1), i = 0; i < 10 && misses.length < 2 && iso(d) >= firstUse; d = addDays(d, -1), i++) {
+    const log = logs[iso(d)] ?? emptyLog();
+    const tasks = tasksFor(d, data, log, log.mode);
+    if (!tasks.some((t) => t.category === 'study' && !t.optional)) continue;
+    misses.push(!dayQualifies(tasks, log));
+  }
+  if (misses.length === 2 && misses.every(Boolean)) return 'היומיים האחרונים היו קשים';
+  const recent = Object.entries(data.summaries ?? {}).filter(([k, v]) => v.savedAt && k >= iso(addDays(today, -14))).sort(([a], [b]) => b.localeCompare(a))[0];
+  if (recent && recent[1].stress >= 4) return 'השבוע היה לחוץ';
+  return null;
+}
