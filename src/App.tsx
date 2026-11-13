@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Dock from './components/Dock';
 import LockScreen from './components/LockScreen';
 import { hasPin } from './lib/lock';
-import { useTheme } from './lib/theme';
+import { useTheme, type ThemeMode } from './lib/theme';
 import Today from './pages/Today';
 import Week from './pages/Week';
 import Study from './pages/Study';
@@ -14,6 +14,8 @@ import Money from './pages/Money';
 import Summary from './pages/Summary';
 import BackOnTrack from './pages/BackOnTrack';
 import Settings from './pages/Settings';
+import { StoreProvider, useStore } from './lib/store';
+import { useReminders } from './lib/reminders';
 
 const AUTO_LOCK_MS = 5 * 60_000; // lock again after 5 minutes in the background
 
@@ -45,6 +47,19 @@ export default function App() {
   }
 
   return (
+    <StoreProvider>
+      <Shell orbs={orbs} mode={mode} setMode={setMode} onLock={() => setLock('locked')} onChangePin={() => setLock('setup')} />
+    </StoreProvider>
+  );
+}
+
+function Shell({ orbs, mode, setMode, onLock, onChangePin }: {
+  orbs: JSX.Element; mode: ThemeMode; setMode: (m: ThemeMode) => void; onLock: () => void; onChangePin: () => void;
+}) {
+  const { ready } = useStore();
+  const { toast, dismiss } = useReminders();
+  if (!ready) return orbs;
+  return (
     <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
       {orbs}
       <Routes>
@@ -58,11 +73,12 @@ export default function App() {
         <Route path="/summary" element={<Summary />} />
         <Route path="/back-on-track" element={<BackOnTrack />} />
         <Route path="/settings" element={
-          <Settings mode={mode} setMode={setMode} onLock={() => setLock('locked')} onChangePin={() => setLock('setup')} />
+          <Settings mode={mode} setMode={setMode} onLock={onLock} onChangePin={onChangePin} />
         } />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Dock />
+      {toast && <button className="toast glass" onClick={dismiss}>{toast}</button>}
     </BrowserRouter>
   );
 }
