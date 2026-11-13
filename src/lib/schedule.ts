@@ -2,7 +2,7 @@ import type { DayLog, DayTask, Mode, TaskTemplate, UserData, WeekType } from './
 import { addDays, iso, restDay, toMin, weekStart } from './dates';
 
 /** Sort key: times after midnight (e.g. sleep at 00:30) belong to the end of the day. */
-const sortKey = (t?: string) => (t ? (toMin(t) < 300 ? toMin(t) + 1440 : toMin(t)) : 9999);
+const sortKey = (t?: string) => (t ? (toMin(t) < 300 ? toMin(t) + 1440 : toMin(t)) : 1430); // untimed: end of day, before late-night sleep
 
 export const emptyLog = (): DayLog => ({ done: {}, studyMin: 0, extras: [], skipped: {} });
 
@@ -54,6 +54,10 @@ export function tasksFor(d: Date, data: UserData | null, log: DayLog, mode: Mode
     };
   });
 
+  for (const t of list) {
+    const o = log.overrides?.[t.id];
+    if (o) Object.assign(t, Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)));
+  }
   for (const x of log.extras) {
     list.push({ id: x.id, title: x.title, category: x.category, start: x.start, extra: true });
   }
@@ -107,4 +111,30 @@ export function weekProgress(today: Date, data: UserData | null, logs: Record<st
     done += tasks.filter((t) => isDone(t, log)).length;
   }
   return total ? Math.round((done / total) * 100) : null;
+}
+
+/** Weekly numbers for the Week page / weekly summary. */
+export function weekStats(anyDay: Date, data: UserData | null, logs: Record<string, DayLog>) {
+  let studyMin = 0, studyTarget = 0, fitDone = 0, fitPlan = 0;
+  const start = weekStart(anyDay);
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(start, i);
+    const log = logs[iso(d)] ?? emptyLog();
+    const tasks = tasksFor(d, data, log, 'full');
+    studyMin += log.studyMin;
+    for (const t of tasks) {
+      if (t.category === 'study' && !t.optional) studyTarget += t.targetMin ?? 0;
+      if (t.category === 'fitness' || t.category === 'run') { fitPlan++; if (isDone(t, log)) fitDone++; }
+    }
+  }
+  return { studyMin, studyTarget, fitDone, fitPlan };
+}
+
+/** Next day (after `from`) that is a working day with tasks – used to suggest where to move tasks. */
+export function nextWorkingDay(from: Date, data: UserData | null) {
+  for (let i = 1; i <= 7; i++) {
+    const d = addDays(from, i);
+    if (!dayOff(d, data) && tasksFor(d, data, emptyLog()).length) return d;
+  }
+  return addDays(from, 1);
 }

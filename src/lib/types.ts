@@ -57,6 +57,7 @@ export interface DayLog {
   timerStart?: number;
   extras: ExtraTask[];
   skipped: Record<string, boolean>;
+  overrides?: Record<string, { title?: string; start?: string; end?: string }>;
 }
 
 export interface Meta {

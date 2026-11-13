@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Check, Pause, Play, Plus, Trash2 } from 'lucide-react';
+import { Check, Pause, Pencil, Play, Plus, Trash2 } from 'lucide-react';
 import { CATEGORY_ICON } from '../icons';
 import { fmtDur, nowMin, toMin } from '../../lib/dates';
 import { isDone } from '../../lib/schedule';
@@ -16,6 +16,7 @@ interface Props {
   onStudy: (action: 'start' | 'stop' | 'add30') => void;
   onLesson: (item: PlanItem) => void;
   onRemoveExtra: (id: string) => void;
+  onEdit?: (t: DayTask) => void;
 }
 
 function currentId(tasks: DayTask[], now: number) {
@@ -54,7 +55,9 @@ export default function Timeline(p: Props) {
               <div className="tl-head">
                 <Icon size={18} className="tl-icon" />
                 <span className="tl-title">{t.title}</span>
-                {t.extra && (
+                {p.onEdit ? (
+                  <button className="tl-remove" onClick={() => p.onEdit!(t)} aria-label="עריכת משימה"><Pencil size={15} /></button>
+                ) : t.extra && (
                   <button className="tl-remove" onClick={() => p.onRemoveExtra(t.id)} aria-label="מחק משימה"><Trash2 size={15} /></button>
                 )}
               </div>
@@ -63,15 +66,17 @@ export default function Timeline(p: Props) {
                   {t.start}{t.end ? `–${t.end}` : ''}{t.optional ? ' · רשות' : ''}
                 </span>
               )}
-              {study && t.targetMin && (
+              {study && !!t.targetMin && (
                 <div className="study">
                   <div className="bar"><span style={{ width: `${Math.min(100, (studied / t.targetMin) * 100)}%` }} /></div>
                   <div className="study-row">
                     <span className={`study-time ${running ? 'running' : ''}`}>למדתי {fmtDur(studied)} / {fmtDur(t.targetMin)}</span>
                     <div className="study-btns">
-                      <button className="pill gold" onClick={() => p.onStudy(running ? 'stop' : 'start')}>
-                        {running ? <><Pause size={15} /> עצרתי</> : <><Play size={15} /> התחלתי</>}
-                      </button>
+                      {p.isToday && (
+                        <button className="pill gold" onClick={() => p.onStudy(running ? 'stop' : 'start')}>
+                          {running ? <><Pause size={15} /> עצרתי</> : <><Play size={15} /> התחלתי</>}
+                        </button>
+                      )}
                       <button className="pill" onClick={() => p.onStudy('add30')}><Plus size={15} /> 30 דק׳</button>
                     </div>
                   </div>

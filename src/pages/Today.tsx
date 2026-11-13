@@ -12,6 +12,7 @@ import StatsBento from '../components/today/StatsBento';
 import Timeline from '../components/today/Timeline';
 import AddTask from '../components/today/AddTask';
 import CarryOver from '../components/today/CarryOver';
+import TaskSheet from '../components/TaskSheet';
 
 const NOT_MOVABLE = new Set(['wake', 'sleep', 'study', 'zoom', 'review']);
 const uid = () => Math.random().toString(36).slice(2, 9);
@@ -20,6 +21,7 @@ export default function Today() {
   const { data, logs, meta, logFor, updateLog, setData, setMeta, importAll } = useStore();
   const [now, setNow] = useState(new Date());
   const [importMsg, setImportMsg] = useState('');
+  const [editing, setEditing] = useState<DayTask | null>(null);
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 60_000);
     return () => clearInterval(t);
@@ -143,6 +145,7 @@ export default function Today() {
                   onStudy={onStudy}
                   onLesson={onLesson}
                   onRemoveExtra={(id) => updateLog(day, (l) => ({ ...l, extras: l.extras.filter((x) => x.id !== id) }))}
+                  onEdit={setEditing}
                 />
                 <AddTask onAdd={(title, start) => updateLog(day, (l) => ({ ...l, extras: [...l.extras, { id: `x-${uid()}`, title, start, category: 'other' }] }))} />
               </section>
@@ -152,6 +155,7 @@ export default function Today() {
           <Link to="/back-on-track" className="glass back-btn"><Compass size={22} className="compass" /> בוא נחזור למסלול</Link>
         </div>
       )}
+      {editing && <TaskSheet task={editing} date={now} onClose={() => setEditing(null)} />}
     </main>
   );
 }
