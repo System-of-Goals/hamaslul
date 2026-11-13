@@ -67,6 +67,7 @@ export interface WeekSummary {
   savedAt: string;
 }
 export interface Contact { name: string; phone?: string }
+export interface CustomQuote { type: 'faith' | 'motivation'; text: string; source?: string; explain: string }
 
 export interface JournalEntry { id: string; date: string; topic: string; learned: string; caseNote?: string }
 export interface Question { id: string; text: string; answered: boolean; answer?: string }
@@ -96,6 +97,9 @@ export interface UserData {
   wins?: { date: string; text: string }[];
   contacts?: Contact[];
   backOnTrackLog?: string[];                 // dates the page was used
+  quoteFilter?: 'both' | 'faith' | 'motivation';
+  customQuotes?: CustomQuote[];
+  links?: { zoom?: string };
   journal?: JournalEntry[];
   questions?: Question[];
 }

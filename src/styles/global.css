@@ -66,8 +66,10 @@ button { font: inherit; color: inherit; }
   max-width: 560px;
   margin: 0 auto;
   padding: calc(env(safe-area-inset-top) + 20px) 16px calc(var(--dock-h) + 40px + env(safe-area-inset-bottom));
-  animation: rise 0.45s ease both;
+  /* opacity only: a transform here would make it the containing block of position:fixed sheets */
+  animation: fadein 0.45s ease both;
 }
+@keyframes fadein { from { opacity: 0; } }
 @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
 
 .glass {
@@ -500,3 +502,34 @@ a.btn { text-decoration: none; color: #0F1E3D; }
 .nudge { border-color: rgba(46, 196, 160, 0.5); }
 .nudge p { margin: 0 0 10px; line-height: 1.6; }
 .nudge a.pill { text-decoration: none; }
+.day-toggle { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.day-toggle button { min-height: 42px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--chip); color: var(--text); font-family: var(--font-head); font-weight: 700; cursor: pointer; }
+.day-toggle button.on { background: linear-gradient(135deg, var(--gold-2), var(--gold)); color: #0F1E3D; border-color: transparent; }
+
+/* ---------- Settings ---------- */
+.set-sec { padding: 0; }
+.set-sec > summary { list-style: none; cursor: pointer; padding: 16px 18px; margin: 0; }
+.set-sec > summary::-webkit-details-marker { display: none; }
+.set-sec > summary::after { content: '‹'; margin-inline-start: auto; color: var(--muted); font-size: 22px; transition: transform 0.2s; }
+.set-sec[open] > summary::after { transform: rotate(-90deg); }
+.set-body { padding: 0 18px 18px; display: grid; gap: 10px; }
+.segmented.mini { grid-template-columns: 1fr 1fr; padding: 3px; }
+.segmented.mini button { min-height: 34px; font-size: 13px; }
+.weeks-list li { grid-template-columns: 56px 1fr; }
+.inline-row { display: flex; gap: 8px; align-items: center; }
+.inline-row input { flex: 1; min-height: 42px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--chip); color: var(--text); padding: 0 12px; font: inherit; }
+.tpl-group { display: grid; gap: 6px; }
+.tpl-group .field-label { margin: 6px 0 0; }
+.tpl-row { display: grid; grid-template-columns: 48px 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--card-border); background: var(--card); color: inherit; font: inherit; text-align: start; cursor: pointer; }
+.tpl-row.off { opacity: 0.5; }
+.tpl-time { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tpl-title { font-weight: 600; font-size: 14px; line-height: 1.3; }
+.tpl-days { font-size: 12px; color: var(--accent); white-space: nowrap; }
+.two-col { grid-template-columns: 1fr 130px !important; }
+.two-col input, .contact-row input { min-height: 40px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--chip); color: var(--text); padding: 0 10px; font: inherit; }
+.contact-row { grid-template-columns: 70px 1fr auto !important; }
+.custom-q { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.custom-q span { flex: 1; }
+.form-card select { min-height: 44px; border-radius: 14px; border: 1px solid var(--card-border); background: var(--chip); color: var(--text); padding: 0 12px; font: inherit; }
+/* while a bottom sheet is open, the floating dock steps aside */
+body:has(.sheet-backdrop) .dock { display: none; }

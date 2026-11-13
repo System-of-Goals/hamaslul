@@ -44,6 +44,9 @@ export default function Study() {
         </div>
         <div className="bar big"><span style={{ width: `${(complete / data.lessons.length) * 100}%` }} /></div>
         <span className="muted small">{complete} מתוך {data.lessons.length} שיעורים הושלמו (כל השלבים)</span>
+        {data.links?.zoom && /^https:\/\//.test(data.links.zoom) && (
+          <a className="btn" href={data.links.zoom} target="_blank" rel="noreferrer" style={{ color: 'var(--text)' }}>📹 הקלטות הקורס בזום</a>
+        )}
       </section>
 
       <div className="segmented tabs3">

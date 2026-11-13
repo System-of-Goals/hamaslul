@@ -78,8 +78,9 @@ export const QUOTES: Quote[] = [
 ];
 
 /** Same quote all day, a different one every day. */
-export function quoteOfDay(d: Date, filter: 'both' | QuoteType = 'both') {
-  const list = filter === 'both' ? QUOTES : QUOTES.filter((q) => q.type === filter);
+export function quoteOfDay(d: Date, filter: 'both' | QuoteType = 'both', extra: Quote[] = []) {
+  const all = [...QUOTES, ...extra];
+  const list = filter === 'both' ? all : all.filter((q) => q.type === filter);
   const dayNum = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000);
   return list[((dayNum * 13) % list.length + list.length) % list.length];
 }
