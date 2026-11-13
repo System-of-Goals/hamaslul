@@ -5,6 +5,7 @@ import {
 import { PageTitle } from '../components/PageShell';
 import TemplateSheet from '../components/TemplateSheet';
 import PasteData from '../components/PasteData';
+import { useInstall } from '../lib/install';
 import type { ThemeMode } from '../lib/theme';
 import { enrollFingerprint, fingerprintAvailable, hasFingerprint, removeFingerprint } from '../lib/lock';
 import { downloadText, pickFile, useStore } from '../lib/store';
@@ -36,6 +37,7 @@ export default function Settings({ mode, setMode, onLock, onChangePin }: {
   const [vac, setVac] = useState('');
   const [cq, setCq] = useState<CustomQuote>({ type: 'faith', text: '', source: '', explain: '' });
   const [newContact, setNewContact] = useState('');
+  const { canInstall, install } = useInstall();
 
   useEffect(() => {
     fingerprintAvailable().then(setFpAvail);
@@ -68,6 +70,7 @@ export default function Settings({ mode, setMode, onLock, onChangePin }: {
             {modes.map(({ v, label }) => <button key={v} className={mode === v ? 'on' : ''} onClick={() => setMode(v)}>{label}</button>)}
           </div>
           <p className="muted small">אוטומטי: בהיר ביום, כהה מהשקיעה (זמני ירושלים).</p>
+          {canInstall && <button className="btn btn-gold" onClick={install}>📲 התקן כאפליקציה במסך הבית</button>}
         </Section>
 
         <Section icon={<Lock size={18} />} title="נעילה">

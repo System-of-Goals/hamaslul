@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChefHat, Compass, FileUp, Home, Moon, Shield, Sun } from 'lucide-react';
+import { ChefHat, Compass, Download, FileUp, Home, Moon, Shield, Sun } from 'lucide-react';
 import { addDays, dayName, greeting, hebrewDate, iso, shortDate } from '../lib/dates';
 import { dayOff, isDone, needsNudge, progress, streak, tasksFor, weekProgress, weekTypeOf } from '../lib/schedule';
 import { coursePace, dueToday } from '../lib/course';
@@ -15,6 +15,8 @@ import AddTask from '../components/today/AddTask';
 import CarryOver from '../components/today/CarryOver';
 import TaskSheet from '../components/TaskSheet';
 import PasteData from '../components/PasteData';
+import Confetti from '../components/Confetti';
+import { useInstall } from '../lib/install';
 
 const NOT_MOVABLE = new Set(['wake', 'sleep', 'study', 'zoom', 'review']);
 const uid = () => Math.random().toString(36).slice(2, 9);
@@ -24,6 +26,8 @@ export default function Today() {
   const [now, setNow] = useState(new Date());
   const [importMsg, setImportMsg] = useState('');
   const [editing, setEditing] = useState<DayTask | null>(null);
+  const { canInstall, install } = useInstall();
+  const [party, setParty] = useState(false);
   const [nudgeOff, setNudgeOff] = useState(() => { try { return localStorage.getItem('nudge-dismissed') === iso(new Date()); } catch { return false; } });
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 60_000);
@@ -102,6 +106,15 @@ export default function Today() {
         {greeting(now)}
       </h1>
 
+      {canInstall && (
+        <section className="glass install-card" style={{ marginBottom: 14 }}>
+          <Download size={22} className="ok-text" />
+          <p>להתקין את ״המסלול שלי״ כאפליקציה במסך הבית?</p>
+          <button className="pill gold" onClick={install}>התקן</button>
+        </section>
+      )}
+      {party && <Confetti />}
+      {party && <div className="toast glass" role="status">🎉 יום מושלם – כל המשימות בוצעו!</div>}
       {!data ? (
         <section className="glass onboard">
           <h2>ברוך הבא ל״המסלול שלי״ 👋</h2>
@@ -158,7 +171,23 @@ export default function Today() {
                   isToday
                   lessonItems={dueToday(data, day)}
                   lessons={data.lessons}
-                  onToggle={(id) => updateLog(day, (l) => ({ ...l, done: { ...l.done, [id]: !isDone(tasks.find((t) => t.id === id)!, l) } }))}
+                  onToggle={(id) => {
+                    const t = tasks.find((x) => x.id === id)!;
+                    const nowDone = !isDone(t, log);
+                    updateLog(day, (l) => ({ ...l, done: { ...l.done, [id]: nowDone } }));
+                    if (nowDone) {
+                      const hhmm = `${String(new Date().getHours()).padStart(2, '0')}:${String(new Date().getMinutes()).padStart(2, '0')}`;
+                      // marking "wake" / "sleep" fills the sleep log automatically (sleep belongs to tomorrow morning)
+                      const hNow = new Date().getHours();
+                      if (t.category === 'wake' && hNow < 11) setData((d) => ({ ...d, sleepLog: { ...d.sleepLog, [day]: { bed: d.sleepLog?.[day]?.bed ?? (d.sleepTargets[day.slice(0, 7)] ?? '00:00'), wake: hhmm } } }));
+                      if (t.category === 'sleep' && (hNow >= 20 || hNow < 5)) {
+                        const k = new Date().getHours() < 5 ? day : iso(addDays(now, 1));
+                        setData((d) => ({ ...d, sleepLog: { ...d.sleepLog, [k]: { bed: hhmm, wake: d.sleepLog?.[k]?.wake ?? '06:00' } } }));
+                      }
+                      const left = tasks.filter((x) => !x.optional && x.id !== id && !isDone(x, log));
+                      if (!t.optional && left.length === 0) { setParty(true); setTimeout(() => setParty(false), 3200); }
+                    }
+                  }}
                   onStudy={onStudy}
                   onLesson={onLesson}
                   onRemoveExtra={(id) => updateLog(day, (l) => ({ ...l, extras: l.extras.filter((x) => x.id !== id) }))}

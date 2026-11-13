@@ -1,19 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Dock from './components/Dock';
 import LockScreen from './components/LockScreen';
 import { hasPin } from './lib/lock';
 import { useTheme, type ThemeMode } from './lib/theme';
 import Today from './pages/Today';
-import Week from './pages/Week';
-import Study from './pages/Study';
-import Goals from './pages/Goals';
-import More from './pages/More';
-import Habits from './pages/Habits';
-import Money from './pages/Money';
-import Summary from './pages/Summary';
-import BackOnTrack from './pages/BackOnTrack';
-import Settings from './pages/Settings';
+
+// every page except "Today" loads on demand → faster start
+const Week = lazy(() => import('./pages/Week'));
+const Study = lazy(() => import('./pages/Study'));
+const Goals = lazy(() => import('./pages/Goals'));
+const More = lazy(() => import('./pages/More'));
+const Habits = lazy(() => import('./pages/Habits'));
+const Money = lazy(() => import('./pages/Money'));
+const Summary = lazy(() => import('./pages/Summary'));
+const BackOnTrack = lazy(() => import('./pages/BackOnTrack'));
+const Settings = lazy(() => import('./pages/Settings'));
 import { StoreProvider, useStore } from './lib/store';
 import { useReminders } from './lib/reminders';
 
@@ -62,6 +64,7 @@ function Shell({ orbs, mode, setMode, onLock, onChangePin }: {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
       {orbs}
+      <Suspense fallback={<main className="page" />}>
       <Routes>
         <Route path="/" element={<Today />} />
         <Route path="/week" element={<Week />} />
@@ -77,6 +80,7 @@ function Shell({ orbs, mode, setMode, onLock, onChangePin }: {
         } />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </Suspense>
       <Dock />
       {toast && <button className="toast glass" onClick={dismiss}>{toast}</button>}
     </BrowserRouter>
