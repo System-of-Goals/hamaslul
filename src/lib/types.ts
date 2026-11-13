@@ -31,7 +31,15 @@ export interface Lesson {
   group: string;
   done: Partial<Record<LessonStep, boolean>>;
   steps: LessonStep[];
+  notes?: string;      // summary written in the app
+  link?: string;       // external summary (Word / Drive)
+  recLink?: string;    // zoom recording
+  minutes?: number;    // time spent on this lesson
+  review?: boolean;    // "needs review"
 }
+
+export interface JournalEntry { id: string; date: string; topic: string; learned: string; caseNote?: string }
+export interface Question { id: string; text: string; answered: boolean; answer?: string }
 
 export interface PlanItem { lesson: number; step: LessonStep; due: string }
 
@@ -46,6 +54,8 @@ export interface UserData {
   sleepTargets: Record<string, string>;     // key: "YYYY-MM" → "HH:MM"
   lessons: Lesson[];
   lessonPlan: PlanItem[];
+  journal?: JournalEntry[];
+  questions?: Question[];
 }
 
 export interface ExtraTask { id: string; title: string; start?: string; category: Category; fromDate?: string }

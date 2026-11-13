@@ -305,3 +305,54 @@ button { font: inherit; color: inherit; }
 .sheet-actions, .confirm { display: grid; gap: 8px; margin-top: 6px; }
 .btn.danger { color: #E5675A; border-color: rgba(229, 103, 90, 0.4); }
 .day-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ---------- Study ---------- */
+.course-head { display: grid; gap: 10px; margin-bottom: 12px; }
+.ch-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.pace-chip.pace-behind { color: #E5875A; border-color: rgba(229, 135, 90, 0.4); }
+.pace-chip.pace-ahead, .pace-chip.pace-on { color: var(--ok); border-color: rgba(46, 196, 160, 0.4); }
+.bar.big { height: 10px; }
+.tabs3 { grid-template-columns: repeat(3, 1fr); margin-bottom: 12px; }
+.lesson-group { display: grid; gap: 10px; }
+.lesson-group .section-h { margin-bottom: 2px; }
+.lesson-row { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; padding-top: 10px; border-top: 1px solid var(--card-border); }
+.lesson-row:first-of-type { border-top: 0; padding-top: 0; }
+.lesson-open { display: flex; align-items: center; gap: 4px; border: 0; background: none; cursor: pointer; padding: 0; color: inherit; }
+.lesson-num { width: 34px; height: 34px; border-radius: 12px; display: grid; place-items: center; background: var(--chip); font-family: var(--font-head); font-weight: 700; }
+.lesson-row.complete .lesson-num { background: var(--ok); color: #fff; }
+.review-flag { color: #E5875A; }
+.has-notes { font-size: 12px; }
+.lesson-steps { display: flex; flex-wrap: wrap; gap: 5px; }
+.step { display: inline-flex; align-items: center; gap: 3px; min-height: 30px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--card-border); background: transparent; cursor: pointer; font-size: 12px; color: var(--muted); }
+.step.ok { background: rgba(46, 196, 160, 0.15); border-color: var(--ok); color: var(--ok); font-weight: 600; }
+.field textarea, .add-form textarea { border-radius: 14px; border: 1px solid var(--card-border); background: var(--chip); color: var(--text); padding: 12px 14px; font: inherit; line-height: 1.6; resize: vertical; }
+.link-field { display: flex; gap: 8px; align-items: center; }
+.link-field input { flex: 1; }
+.review-btn { align-self: end; margin-bottom: 12px; white-space: nowrap; }
+.review-btn.on { color: #E5875A; border-color: rgba(229, 135, 90, 0.5); }
+.center { text-align: center; }
+.journal { position: relative; display: grid; gap: 6px; }
+.journal p { margin: 0; line-height: 1.6; }
+.journal .tl-remove { position: absolute; bottom: 10px; left: 10px; }
+.q-form { display: flex; align-items: center; gap: 8px; padding: 10px 12px; }
+.q-form input { flex: 1; min-height: 42px; border: 0; background: transparent; color: var(--text); font: inherit; outline: none; }
+.q-row { display: flex; align-items: flex-start; gap: 10px; padding: 12px; }
+.q-row .tl-dot { margin-top: 0; flex-shrink: 0; }
+.q-row.answered .tl-dot { background: var(--ok); border-color: var(--ok); }
+.q-row.answered .q-body > span { opacity: 0.6; text-decoration: line-through; }
+.q-body { flex: 1; display: grid; gap: 8px; padding-top: 5px; }
+.q-answer { min-height: 38px; border-radius: 10px; border: 1px solid var(--card-border); background: var(--chip); color: var(--text); padding: 0 10px; font: inherit; }
+
+/* hours chart: single series (gold), target as a recessive tick */
+.hours-chart { display: grid; gap: 8px; }
+.hc-readout strong { font-family: var(--font-head); font-size: 22px; }
+.hc-plot { height: 130px; display: grid; gap: 2px; align-items: end; border-bottom: 1px solid var(--card-border); direction: ltr; }
+.hc-col { position: relative; height: 100%; border: 0; background: none; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding: 0 5px; }
+.hc-bar { display: block; width: 100%; max-width: 22px; border-radius: 4px 4px 0 0; background: var(--accent); opacity: 0.55; transition: height 0.6s ease, opacity 0.2s; }
+.hc-col.sel .hc-bar { opacity: 1; }
+.hc-target { position: absolute; left: 3px; right: 3px; height: 0; border-top: 2px dashed var(--muted); opacity: 0.7; }
+.hc-axis { display: grid; gap: 2px; direction: ltr; text-align: center; font-size: 10px; color: var(--muted); }
+.hc-axis .sel { color: var(--text); font-weight: 600; }
+.hc-key { display: flex; align-items: center; gap: 6px; margin: 0; }
+.hc-key-line { width: 18px; border-top: 2px dashed var(--muted); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
