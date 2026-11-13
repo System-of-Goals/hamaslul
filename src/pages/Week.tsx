@@ -140,7 +140,7 @@ export default function Week() {
 
             {wt === 'home' && shift === 'noon' && (
               <div className="glass shift-box">
-                <p style={{ margin: 0 }}>משמרת 11:00–23:00: {afterWork.length ? `${afterWork.length} משימות אחרי העבודה יעברו ליום אחר.` : 'אין משימות אחרי העבודה.'}</p>
+                <p style={{ margin: 0 }}>משמרת <bdi dir="ltr">11:00-23:00</bdi>: {afterWork.length ? `${afterWork.length} משימות אחרי העבודה יעברו ליום אחר.` : 'אין משימות אחרי העבודה.'}</p>
                 {afterWork.length > 0 && (
                   <button className="btn btn-gold" onClick={() => { afterWork.forEach((t) => moveTask(t, nextDay)); setShift('none'); }}>
                     העבר הכול ליום {dayName(nextDay)} {shortDate(nextDay)}

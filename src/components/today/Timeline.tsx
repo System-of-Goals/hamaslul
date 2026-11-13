@@ -70,7 +70,7 @@ export default function Timeline(p: Props) {
                 <div className="study">
                   <div className="bar"><span style={{ width: `${Math.min(100, (studied / t.targetMin) * 100)}%` }} /></div>
                   <div className="study-row">
-                    <span className={`study-time ${running ? 'running' : ''}`}>למדתי {fmtDur(studied)} / {fmtDur(t.targetMin)}</span>
+                    <span className={`study-time ${running ? 'running' : ''}`}>למדתי <bdi dir="ltr">{fmtDur(studied)} / {fmtDur(t.targetMin)}</bdi></span>
                     <div className="study-btns">
                       {p.isToday && (
                         <button className="pill gold" onClick={() => p.onStudy(running ? 'stop' : 'start')}>

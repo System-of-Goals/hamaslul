@@ -19,7 +19,7 @@ export default function HoursChart() {
   return (
     <div className="hours-chart">
       <div className="hc-readout" aria-live="polite">
-        <strong>{fmtDur(cur.min)}</strong>
+        <strong><bdi dir="ltr">{fmtDur(cur.min)}</bdi></strong>
         <span className="muted"> מתוך {Math.round(cur.target / 60)} ש׳ · שבוע {shortDate(cur.w)}</span>
       </div>
       <div className="hc-plot" style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 60px))` }} role="img" aria-label="שעות לימוד בשמונת השבועות האחרונים">

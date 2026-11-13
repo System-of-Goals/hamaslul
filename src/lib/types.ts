@@ -38,6 +38,18 @@ export interface Lesson {
   review?: boolean;    // "needs review"
 }
 
+export interface StageTask { id: string; text: string; done?: boolean; ref?: { lesson: number; step: LessonStep } }
+export interface Stage { id: string; title: string; due?: string; status: 'done' | 'active' | 'locked'; tasks: StageTask[] }
+export interface Goal {
+  id: string;
+  title: string;
+  icon: 'home' | 'wallet' | 'dumbbell' | 'leaf' | 'star';
+  why?: string;
+  stages: Stage[];
+  metric?: 'stress';          // shows a weekly stress-level metric instead of stages
+  manualProgress?: number;    // overrides the automatic %
+}
+
 export interface JournalEntry { id: string; date: string; topic: string; learned: string; caseNote?: string }
 export interface Question { id: string; text: string; answered: boolean; answer?: string }
 
@@ -54,6 +66,8 @@ export interface UserData {
   sleepTargets: Record<string, string>;     // key: "YYYY-MM" → "HH:MM"
   lessons: Lesson[];
   lessonPlan: PlanItem[];
+  vision?: string;
+  goals?: Goal[];
   journal?: JournalEntry[];
   questions?: Question[];
 }

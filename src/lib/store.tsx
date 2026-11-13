@@ -78,7 +78,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       return 'backup';
     }
     if (obj?.version === 1 && Array.isArray(obj.templates)) {
-      await replaceData(obj as UserData);
+      // existing data → merge: add only fields that don't exist yet (keeps all progress)
+      const merged = data ? { ...obj, ...data } as UserData : obj as UserData;
+      await replaceData(merged);
       return 'data';
     }
     throw new Error('bad file');
