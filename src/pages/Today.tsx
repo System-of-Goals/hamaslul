@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Compass, FileUp, Home, Moon, Shield, Sun } from 'lucide-react';
+import { ChefHat, Compass, FileUp, Home, Moon, Shield, Sun } from 'lucide-react';
 import { addDays, dayName, greeting, hebrewDate, iso, shortDate } from '../lib/dates';
 import { dayOff, isDone, progress, streak, tasksFor, weekProgress, weekTypeOf } from '../lib/schedule';
 import { coursePace, dueToday } from '../lib/course';
+import { findRecipe } from '../lib/recipes';
 import { pickFile, useStore } from '../lib/store';
 import type { DayTask, Mode, PlanItem } from '../lib/types';
 import QuoteCard from '../components/today/QuoteCard';
@@ -148,6 +149,10 @@ export default function Today() {
                   onLesson={onLesson}
                   onRemoveExtra={(id) => updateLog(day, (l) => ({ ...l, extras: l.extras.filter((x) => x.id !== id) }))}
                   onEdit={setEditing}
+                  notes={Object.fromEntries(tasks.filter((t) => t.category === 'cook').map((t) => {
+                    const r = findRecipe(data, log.recipe);
+                    return [t.id, <Link key={t.id} className="tl-note" to="/habits?tab=cook"><ChefHat size={15} /> {r ? r.name : 'מה מבשלים? בחר מתכון'}</Link>];
+                  }))}
                 />
                 <AddTask onAdd={(title, start) => updateLog(day, (l) => ({ ...l, extras: [...l.extras, { id: `x-${uid()}`, title, start, category: 'other' }] }))} />
               </section>

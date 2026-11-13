@@ -50,6 +50,13 @@ export interface Goal {
   manualProgress?: number;    // overrides the automatic %
 }
 
+export type RecipeCat = 'עוף' | 'בשר' | 'תוספות' | 'פרווה' | 'פיתות';
+export interface Recipe {
+  id: string; name: string; cat: RecipeCat; kind: 'meat' | 'parve';
+  time: number; servings: number; ingredients: string[]; steps: string[]; custom?: boolean;
+}
+export interface Workout { date: string; stage: number; rating: 'easy' | 'ok' | 'hard'; km?: number; minutes?: number }
+
 export interface JournalEntry { id: string; date: string; topic: string; learned: string; caseNote?: string }
 export interface Question { id: string; text: string; answered: boolean; answer?: string }
 
@@ -68,6 +75,11 @@ export interface UserData {
   lessonPlan: PlanItem[];
   vision?: string;
   goals?: Goal[];
+  recipes?: Recipe[];                       // user recipes (and edited copies of built-in ones)
+  fitnessStage?: number;
+  workouts?: Workout[];
+  sleepLog?: Record<string, { bed: string; wake: string }>;  // key: morning date
+  deepClean?: Record<string, string[]>;     // key: "YYYY-MM" → rooms done
   journal?: JournalEntry[];
   questions?: Question[];
 }
@@ -82,6 +94,7 @@ export interface DayLog {
   extras: ExtraTask[];
   skipped: Record<string, boolean>;
   overrides?: Record<string, { title?: string; start?: string; end?: string }>;
+  recipe?: string;   // recipe chosen for this day's cooking
 }
 
 export interface Meta {

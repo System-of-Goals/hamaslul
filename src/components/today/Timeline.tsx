@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Check, Pause, Pencil, Play, Plus, Trash2 } from 'lucide-react';
 import { CATEGORY_ICON } from '../icons';
 import { fmtDur, nowMin, toMin } from '../../lib/dates';
@@ -17,6 +17,7 @@ interface Props {
   onLesson: (item: PlanItem) => void;
   onRemoveExtra: (id: string) => void;
   onEdit?: (t: DayTask) => void;
+  notes?: Record<string, ReactNode>;
 }
 
 function currentId(tasks: DayTask[], now: number) {
@@ -66,6 +67,7 @@ export default function Timeline(p: Props) {
                   {t.start}{t.end ? `–${t.end}` : ''}{t.optional ? ' · רשות' : ''}
                 </span>
               )}
+              {p.notes?.[t.id]}
               {study && !!t.targetMin && (
                 <div className="study">
                   <div className="bar"><span style={{ width: `${Math.min(100, (studied / t.targetMin) * 100)}%` }} /></div>

@@ -405,3 +405,46 @@ button { font: inherit; color: inherit; }
 .paste-data > .btn { width: 100%; max-width: 320px; }
 .paste-data textarea { width: 100%; border-radius: 14px; border: 1px solid var(--card-border); background: var(--chip); color: var(--text); padding: 10px; font: 12px monospace; }
 .onboard .btn-gold { width: 100%; max-width: 320px; }
+
+/* ---------- Habits ---------- */
+.tabs4 { grid-template-columns: repeat(4, 1fr); margin-bottom: 12px; }
+.icon-btn.sm { width: 32px; height: 32px; }
+.icon-btn:disabled { opacity: 0.35; cursor: default; }
+.stage-nav { display: flex; align-items: center; gap: 6px; }
+.fit-stage { font-family: var(--font-head); font-size: 20px; font-weight: 700; margin: 12px 0 10px; }
+.fit-path { display: flex; gap: 4px; }
+.fit-path span { flex: 1; height: 6px; border-radius: 999px; background: var(--chip); }
+.fit-path span.done { background: var(--ok); }
+.fit-path span.cur { background: var(--accent); box-shadow: 0 0 8px rgba(232, 184, 92, 0.6); }
+.rate-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.level-up p { margin: 0 0 10px; line-height: 1.6; }
+.level-up { border-color: rgba(232, 184, 92, 0.55); }
+.plain-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.plain-list li { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; font-size: 14px; }
+.ok-text { color: var(--ok); font-weight: 600; }
+.late-text { color: #E5875A; font-weight: 600; }
+.sum-grid.two { grid-template-columns: 1fr 1fr; }
+.cook-day { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.cook-day.done .cook-when { text-decoration: line-through; opacity: 0.6; }
+.cook-when { font-weight: 600; min-width: 84px; }
+.search { display: flex; align-items: center; gap: 8px; margin: 12px 0 8px; padding: 0 12px; border-radius: 999px; background: var(--chip); border: 1px solid var(--card-border); }
+.search input { flex: 1; min-height: 40px; border: 0; background: transparent; color: var(--text); font: inherit; outline: none; }
+.cat-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 8px; }
+.cat-chips .pill { flex-shrink: 0; }
+.recipe-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.recipe-card { display: grid; gap: 4px; text-align: start; padding: 12px; border-radius: 16px; border: 1px solid var(--card-border); background: var(--card); cursor: pointer; color: inherit; font: inherit; }
+.rc-name { font-weight: 600; line-height: 1.3; }
+.rc-meta { margin: 0; display: inline-flex; align-items: center; gap: 4px; }
+.recipe-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.recipe-h { font-size: 16px; margin: 16px 0 8px; }
+.ingredients { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ingredients li { display: flex; align-items: center; gap: 10px; line-height: 1.4; }
+.steps { margin: 0; padding-inline-start: 22px; display: grid; gap: 8px; line-height: 1.6; }
+.steps li::marker { color: var(--accent); font-weight: 700; }
+.field select { min-height: 44px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--chip); color: var(--text); padding: 0 10px; font: inherit; }
+.rooms { display: flex; flex-wrap: wrap; gap: 6px; }
+.tl-note { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 600; }
+/* never let a wide child (e.g. a horizontally scrolling chip row) stretch the page */
+.page > *, .stack > * { min-width: 0; }
+.cat-chips { max-width: 100%; scrollbar-width: none; }
+html, body { overflow-x: hidden; }
