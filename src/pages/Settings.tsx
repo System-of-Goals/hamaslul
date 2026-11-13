@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Bell, Database, Download, FileUp, Fingerprint, Lock, Palette, Settings as SettingsIcon } from 'lucide-react';
 import { downloadText, pickFile, useStore } from '../lib/store';
 import { iso } from '../lib/dates';
+import PasteData from '../components/PasteData';
 import { PageTitle, ComingSoon } from '../components/PageShell';
 import type { ThemeMode } from '../lib/theme';
 import { enrollFingerprint, fingerprintAvailable, hasFingerprint, removeFingerprint } from '../lib/lock';
@@ -85,6 +86,7 @@ export default function Settings({ mode, setMode, onLock, onChangePin }: {
               <Download size={18} /> שמור גיבוי לטלפון
             </button>
             <button className="btn" onClick={load}><FileUp size={18} /> טען נתונים / גיבוי מקובץ</button>
+            <PasteData onDone={setMsg} />
             {msg && <p className="small">{msg}</p>}
           </div>
         </section>

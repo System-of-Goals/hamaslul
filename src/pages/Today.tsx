@@ -13,6 +13,7 @@ import Timeline from '../components/today/Timeline';
 import AddTask from '../components/today/AddTask';
 import CarryOver from '../components/today/CarryOver';
 import TaskSheet from '../components/TaskSheet';
+import PasteData from '../components/PasteData';
 
 const NOT_MOVABLE = new Set(['wake', 'sleep', 'study', 'zoom', 'review']);
 const uid = () => Math.random().toString(36).slice(2, 9);
@@ -104,6 +105,7 @@ export default function Today() {
           <h2>ברוך הבא ל״המסלול שלי״ 👋</h2>
           <p className="muted">כדי להתחיל, טען את קובץ הנתונים האישי שלך (my-data.json). הנתונים נשמרים רק בטלפון הזה.</p>
           <button className="btn btn-gold" onClick={loadData}><FileUp size={18} /> טען את הנתונים שלי</button>
+          <PasteData onDone={setImportMsg} />
           {importMsg && <p className="small">{importMsg}</p>}
         </section>
       ) : (

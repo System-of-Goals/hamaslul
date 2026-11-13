@@ -401,3 +401,7 @@ button { font: inherit; color: inherit; }
 .confetti { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; }
 .confetti span { position: absolute; top: -12px; width: 8px; height: 14px; border-radius: 2px; animation: fall linear forwards; }
 @keyframes fall { to { top: 105%; transform: translateX(40px) rotate(720deg); opacity: 0.8; } }
+.paste-data { width: 100%; display: grid; justify-items: center; }
+.paste-data > .btn { width: 100%; max-width: 320px; }
+.paste-data textarea { width: 100%; border-radius: 14px; border: 1px solid var(--card-border); background: var(--chip); color: var(--text); padding: 10px; font: 12px monospace; }
+.onboard .btn-gold { width: 100%; max-width: 320px; }
